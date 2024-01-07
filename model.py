@@ -1,3 +1,5 @@
+# This code has the central model proposal, it uses the nltk functions of tokenizing and tagging words  
+
 import pandas as pd
 import numpy as np
 import nltk
@@ -5,18 +7,18 @@ import matplotlib.pyplot as plt
 
 X = pd.read_csv("train_essays.csv")
 
-#print(X)
-
 textos = X.text
 labels = X.generated
 
 n = len(textos)
 
+# These are the tags used by the tag.pos_tag function of nltk
 arr = ['NNS', '.', 'VBP', 'VBN', 'IN', 'PRP', 'VBD', 'JJ', 'DT', 'CD', ',', 'WRB', 'NNP', 'CC', 'NN', 'PRP$', 'VBZ', 'RB', 'VBG', 'TO', 'VB', 'MD', '``', "''", ':', 'NNPS', 'PDT', 'WDT', 'RP', 'JJR', 'JJS', 'RBR', 'EX', 'POS', 'RBS', 'WP', 'UH', 'FW', '$', 'WP$']
 numAt = len(arr)
 
 M = np.eye(n,numAt)
 
+# We tokenize and tag every text and then calculate the proportion of each tag in the text, then we create a vector with such proportions
 for r in range(n):
     print(r)
     v = nltk.tokenize.word_tokenize(textos[r])
@@ -30,13 +32,11 @@ for r in range(n):
                 k[j] += 1/m 
     M[r] = k
     
+# Matrix M has the proportions of each text in each row
 
-    #print(len(v1) - sum(k))
-
-    #if labels[r] == 1:
-    #    plt.plot(np.arange(0,numAt),k,color="red")
-    #if labels[r] == 0:
-    #    plt.plot(np.arange(0,numAt),k,color="blue")
+# In the next code we take averages of each word type in AI written texts. We can modify the 1 in labels[j] == 1: 
+# to calculate averages in human written texts. We then plot these averages, this may helps us to fand any patterns
+# in this proportions of word types so that we can distinguish human written text from AI written text.
 
 arrf = np.zeros(numAt)
 for i in range(numAt):
@@ -54,26 +54,6 @@ plt.plot(np.arange(0,numAt),arrf, color = "red")
 plt.show()
 
 
-#print(v1)
-
-#arr = ['CC','CD','CS','EX','IN','JJ','JJA','JJC','JJCC','JJS','JJF','JJM','NN','NNA','NNC','NNS','NNP','NNPC','PRP','PRPS','PRP$','RB','RBR','RBS','VB','VBA','VBD','VBG','VBN','VBZ','FW','SYM','PUN']
-
-
-
-
-#print(k)
-#print(len(v1))
-#print(sum(k))
-
-#print(np.arange(0,numAt))
-
-#plt.plot(np.arange(0,numAt),k)
-#plt.show()
-
-#for i in range(n):
-#    for j in range(33):
-#        M[i][j]
-    
 
 
 
